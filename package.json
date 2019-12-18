@@ -15,6 +15,7 @@
         "uuid": "^3.3.2"
     },
     "devDependencies": {
+        "serverless-offline": "^5.12.1",
         "serverless-pseudo-parameters": "^2.4.0"
     }
 }

@@ -28,6 +28,7 @@ custom:
       Fn::GetAtt: [MySqlRDSInstance, Endpoint.Port]
 plugins:
   - serverless-pseudo-parameters
+  - serverless-offline
 resources:
   Resources:
     LambdaRole: ${file(./resource/LambdaRole.yml)}
@@ -48,6 +49,12 @@ resources:
     MySqlRDSInstance: ${file(./resource/MySqlRDSInstance.yml)}
     
 functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: /hello
+          method: get
   graphql:
     handler: handler.server
     events:
