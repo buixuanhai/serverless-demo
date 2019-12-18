@@ -12,10 +12,10 @@ const resolvers = {
     }
 };
 
-const lambda = new GraphQLServerLambda({
-    typeDefs,
-    resolvers
-});
+// const lambda = new GraphQLServerLambda({
+//     typeDefs,
+//     resolvers
+// });
 
 const hello = async event => {
     return {
@@ -31,6 +31,6 @@ const hello = async event => {
     };
 };
 
-exports.server = lambda.graphqlHandler;
-exports.playground = lambda.playgroundHandler;
+// exports.server = lambda.graphqlHandler;
+// exports.playground = lambda.playgroundHandler;
 exports.hello = hello;

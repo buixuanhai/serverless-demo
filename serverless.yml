@@ -1,12 +1,15 @@
 service: ${file(./secrets.json):ApiName}
 
+package:
+  individually: true
+
 provider:
   name: aws
   region: us-east-1
   stage: dev
   profile: te-hai
   memorySize: 256
-  runtime: nodejs12.x
+  runtime: nodejs10.x
   role: LambdaRole
   environment:
     #mysql
@@ -18,6 +21,15 @@ provider:
     USERNAME: ${self:custom.USERNAME}
     PASSWORD: ${self:custom.PASSWORD}
 custom:
+  bundle: 
+    linting: false
+  custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'   # Name of webpack configuration file
+    includeModules: false   # Node modules configuration for packaging
+    packager: 'npm'   # Packager that will be used to package your external modules
+    excludeFiles: src/**/*.test.js # Provide a glob for files to ignore
+
   DB_NAME: graphql
   USERNAME: master
   PASSWORD: password
@@ -27,6 +39,7 @@ custom:
     PORT:
       Fn::GetAtt: [MySqlRDSInstance, Endpoint.Port]
 plugins:
+  - serverless-webpack
   - serverless-pseudo-parameters
   - serverless-offline
 resources:
@@ -55,18 +68,4 @@ functions:
       - http:
           path: /hello
           method: get
-  graphql:
-    handler: handler.server
-    events:
-      - http:
-          path: /
-          method: post
-          cors: true
-  playground:
-    handler: handler.playground
-    events:
-      - http:
-          path: /
-          method: get
-          cors: true
-    
+  
