@@ -1,7 +1,7 @@
 import { db } from './common/Db'
 import { success, failure } from './common/response-lib'
 
-export const hello = async event => {
+export const hello = async (event, context, callback) => {
   const users = await db.query(`
   select id, uuid, name from users `)
 

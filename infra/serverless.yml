@@ -1,0 +1,53 @@
+service: te-infra
+package:
+  individually: true
+
+provider:
+  name: aws
+  region: us-east-1
+  stage: dev
+  profile: te-hai
+  memorySize: 256
+  runtime: nodejs10.x
+  role: LambdaRole
+  environment:
+    #mysql
+    MYSQL_HOST: ${self:custom.MYSQL.HOST}
+    MYSQL_PORT: ${self:custom.MYSQL.PORT}
+    
+    #common
+    DB_NAME: ${self:custom.DB_NAME}
+    USERNAME: ${self:custom.USERNAME}
+    PASSWORD: ${self:custom.PASSWORD}
+custom:
+  DB_NAME: tadev
+  USERNAME: master
+  PASSWORD: password
+  MYSQL:
+    HOST:
+      Fn::GetAtt: [MySqlRDSInstance, Endpoint.Address]
+    PORT:
+      Fn::GetAtt: [MySqlRDSInstance, Endpoint.Port]
+plugins:
+  - serverless-pseudo-parameters
+  - serverless-offline
+resources:
+  Resources:
+    LambdaRole: ${file(./resource/LambdaRole.yml)}
+    ServerlessInternetGateway: ${file(./resource/ServerlessInternetGateway.yml)}
+    ServerlessVPC: ${file(./resource/ServerlessVPC.yml)}
+    ServerlessVPCGA: ${file(./resource/ServerlessVPCGA.yml)}
+    ServerlessSubnetA: ${file(./resource/ServerlessSubnetA.yml)}
+    ServerlessSubnetB: ${file(./resource/ServerlessSubnetB.yml)}
+    ServerlessSubnetC: ${file(./resource/ServerlessSubnetC.yml)}
+    ServerlessSubnetGroup: ${file(./resource/ServerlessSubnetGroup.yml)}
+    ServerlessSecurityGroup: ${file(./resource/ServerlessSecurityGroup.yml)}
+    RouteTablePublic: ${file(./resource/RouteTablePublic.yml)}
+    RoutePublic: ${file(./resource/RoutePublic.yml)}
+    RouteTableAssociationSubnetA: ${file(./resource/RouteTableAssociationSubnetA.yml)}
+    RouteTableAssociationSubnetB: ${file(./resource/RouteTableAssociationSubnetB.yml)}
+    RouteTableAssociationSubnetC: ${file(./resource/RouteTableAssociationSubnetC.yml)}
+
+    MySqlRDSInstance: ${file(./resource/MySqlRDSInstance.yml)}
+    
+functions:

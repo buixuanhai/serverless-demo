@@ -1,0 +1,69 @@
+service: te-template-${self:custom.stage}
+package:
+  individually: true
+
+provider:
+  name: aws
+  region: us-east-1
+  stage: dev
+  profile: te-hai
+  memorySize: 256
+  role: LambdaRole
+  environment:
+    #mysql
+    MYSQL_HOST: ${self:custom.MYSQL.HOST}
+    MYSQL_PORT: ${self:custom.MYSQL.PORT}
+    
+    #common
+    DB_NAME: ${self:custom.DB_NAME}
+    USERNAME: ${self:custom.USERNAME}
+    PASSWORD: ${self:custom.PASSWORD}
+custom:
+  DB_NAME: tadev
+  USERNAME: master
+  PASSWORD: password
+  MYSQL:
+    HOST:
+      Fn::GetAtt: [MySqlRDSInstance, Endpoint.Address]
+    PORT:
+      Fn::GetAtt: [MySqlRDSInstance, Endpoint.Port]
+plugins:
+  - serverless-pseudo-parameters
+  - serverless-offline
+resources:
+  Resources:
+    LambdaRole: ${file(./resource/LambdaRole.yml)}
+    
+functions:
+  getTemplate:
+    handler: src/handler.getTemplate
+      events: 
+        - http:
+            path: /templates/{id}
+            method: get
+
+  createTemplate:
+    handler: src/handler.getTemplate
+      events: 
+        - http:
+            path: /templates/{id}
+            method: post
+  update:
+    handler: src/handler.getTemplate
+      events: 
+        - http:
+            path: /templates/{id}
+            method: post
+
+  listTemplates:
+    handler: src/handler.listTemplates
+      events: 
+        - http:
+            path: /templates/list
+            method: get
+  deleteTemplate:
+    handler: src/handler.deleteTemplate
+      events: 
+        - http:
+            path: /templates/{id}
+            method: delete
