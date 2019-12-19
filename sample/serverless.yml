@@ -1,4 +1,4 @@
-service: te-template-${self:custom.stage}
+service: te-sample-${self:custom.stage}
 package:
   individually: true
 
@@ -7,7 +7,6 @@ provider:
   region: us-east-1
   stage: dev
   profile: te-hai
-  memorySize: 256
   role: LambdaRole
   environment:
     #mysql
@@ -37,35 +36,9 @@ resources:
     LambdaRole: ${file(./resource/LambdaRole.yml)}
     
 functions:
-  getTemplate:
-    handler: src/handler.getTemplate
+  hello:
+    handler: src/handler.hello
       events: 
         - http:
-            path: /templates/{id}
+            path: /
             method: get
-
-  createTemplate:
-    handler: src/handler.getTemplate
-      events: 
-        - http:
-            path: /templates/{id}
-            method: post
-  update:
-    handler: src/handler.getTemplate
-      events: 
-        - http:
-            path: /templates/{id}
-            method: post
-
-  listTemplates:
-    handler: src/handler.listTemplates
-      events: 
-        - http:
-            path: /templates/list
-            method: get
-  deleteTemplate:
-    handler: src/handler.deleteTemplate
-      events: 
-        - http:
-            path: /templates/{id}
-            method: delete
