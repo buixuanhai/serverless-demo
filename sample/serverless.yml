@@ -18,6 +18,7 @@ provider:
     USERNAME: ${self:custom.USERNAME}
     PASSWORD: ${self:custom.PASSWORD}
 custom:
+  stage: dev
   webpack:
     webpackConfig: ../webpack.config.js
   DB_NAME: tadev
@@ -33,12 +34,26 @@ plugins:
   - serverless-offline
 resources:
   Resources:
-    LambdaRole: ${file(./resource/LambdaRole.yml)}
+    LambdaRole: ${file(../infra/resource/LambdaRole.yml)}
+    ServerlessInternetGateway: ${file(../infra/resource/ServerlessInternetGateway.yml)}
+    ServerlessVPC: ${file(../infra/resource/ServerlessVPC.yml)}
+    ServerlessVPCGA: ${file(../infra/resource/ServerlessVPCGA.yml)}
+    ServerlessSubnetA: ${file(../infra/resource/ServerlessSubnetA.yml)}
+    ServerlessSubnetB: ${file(../infra/resource/ServerlessSubnetB.yml)}
+    ServerlessSubnetC: ${file(../infra/resource/ServerlessSubnetC.yml)}
+    ServerlessSubnetGroup: ${file(../infra/resource/ServerlessSubnetGroup.yml)}
+    ServerlessSecurityGroup: ${file(../infra/resource/ServerlessSecurityGroup.yml)}
+    RouteTablePublic: ${file(../infra/resource/RouteTablePublic.yml)}
+    RoutePublic: ${file(../infra/resource/RoutePublic.yml)}
+    RouteTableAssociationSubnetA: ${file(../infra/resource/RouteTableAssociationSubnetA.yml)}
+    RouteTableAssociationSubnetB: ${file(../infra/resource/RouteTableAssociationSubnetB.yml)}
+    RouteTableAssociationSubnetC: ${file(../infra/resource/RouteTableAssociationSubnetC.yml)}
+    MySqlRDSInstance: ${file(../infra/resource/MySqlRDSInstance.yml)}
     
 functions:
   hello:
     handler: src/handler.hello
-      events: 
-        - http:
-            path: /
-            method: get
+    events: 
+      - http:
+          path: /
+          method: get
